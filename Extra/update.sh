@@ -39,6 +39,8 @@ sleep 2
 
 killall mesquite
 
+sleep 2
+
 eips 1 28 "You May Now Use KindleForge"
 
 exit 0
