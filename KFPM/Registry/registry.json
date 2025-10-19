@@ -117,6 +117,6 @@
         "description": "A Desktop-Grade Text Editor For Kindle",
         "author": "Barna",
         "ABI": ["hf"],
-        "dependencies": []
+        "dependencies": ["kTerm"]
     }
 ]
