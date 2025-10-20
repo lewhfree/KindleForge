@@ -76,5 +76,11 @@
         "uri": "KindleCraft",
         "description": "A basic minecraft server (1.21.8)",
         "author": "p2r3 & gingrspacecadet"
+    },
+    {
+        "name": "KUAL",
+        "uri": "KUAL",
+        "description": "Kindle Unified Application Launcher",
+        "author": "Marek & Penguins"
     }
 ]
