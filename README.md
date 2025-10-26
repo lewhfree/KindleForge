@@ -32,7 +32,7 @@ KindleForge is a GUI Appstore for Kindles, allowing you to download & install tw
 
 - AdBreak, WinterBreak, or LanguageBreak
 - Latest Universal Hotfix
-- Above the 5.6.1.1 firmware in the least
+- Above the 5.13.7 firmware (at present - to be lowered)
 - Both **hard-float and soft-float** kindles should work, but not all packages may support both architectures.
 
 ## Troubleshooting
@@ -69,7 +69,19 @@ A: You must be on the latest hotfix, 2.3.1+. Use the steps mentioned above to re
 
 **Q: No apps load and I'm getting "Unknown ABI!"**
 
-A: This issue has been known to be resolved by pressing 'Update KForge' which ensures a proper reinstallation, though. Also reboot & reload!
+A: This happens commonly after you fix the core dump issue, please use the "Update KForge" functionality in-app to resolve. 
+
+If this doesn't work:
+
+1. Remove:
+—  documents/KindleForge.sh
+—  documents/KindleForge
+2. Reboot
+3. https://github.com/KindleTweaks/KindleForge/?tab=readme-ov-file#installation
+
+**Q: App is installing/uninstalling forever!**
+
+A: Could be caused by a multitude of issues such as beginning the install without wifi, DNS stuff. You can press "refresh packages" in the top bar to clear the lock and retry, or reboot.
 
 ## Special Thanks
 
