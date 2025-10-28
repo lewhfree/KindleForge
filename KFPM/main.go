@@ -20,8 +20,8 @@ import (
 )
 
 const (
-    registryURL   = "https://raw.githubusercontent.com/KindleTweaks/KindleForge/refs/heads/master/KFPM/Registry/registry.json"
-    registryBase  = "https://raw.githubusercontent.com/KindleTweaks/KindleForge/refs/heads/master/KFPM/Registry/"
+    registryURL   = "https://kf.penguins184.xyz/registry.json"
+    registryBase  = "https://kf.penguins184.xyz/"
     installedFile = "/mnt/us/.KFPM/installed.txt"
 )
 
@@ -104,7 +104,7 @@ func main() {
 func help() {
     fmt.Println(`KindleForge Package Manager
 ====================
-v1.1, made by Penguins184, ThatPotatoDev
+v1.1b, made by Penguins184, ThatPotatoDev
 
 kfpm -i <ID> [-v]    Installs Package
 kfpm -r/-u <ID> [-v] Removes/Uninstalls Package
