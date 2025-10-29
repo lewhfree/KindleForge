@@ -88,5 +88,5 @@ A: Could be caused by a multitude of issues such as beginning the install withou
 - [Kurizu](https://ko-fi.com/kurizu), Illusion help & app image
 - Gingrspacecadet, KFPM, inspiration & repository help
 - Clint, event & KFPM troubleshooting, scroll help
-- Dammit Jeff, Gambatte-K2 & KOReader icons
+- Dammit Jeff, repository icons
 - ThatPotatoDev, ABI differentiation, dependencies, & tweak support
