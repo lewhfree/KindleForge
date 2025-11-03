@@ -376,7 +376,7 @@ function loadAllRegistries(fileUrl) {
       };
     };
     repos.forEach(function(url) {
-      _fetch(url, oneRepoLoaded);
+      _fetch(url + "/registry.json", oneRepoLoaded);
     });
 
   });
