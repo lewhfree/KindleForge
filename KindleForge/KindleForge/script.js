@@ -374,7 +374,8 @@ function loadAllRegistries(fileUrl) {
           render(installed);
         });
       };
-    } repos.forEach(function(url) {
+    };
+    repos.forEach(function(url) {
       _fetch(url, oneRepoLoaded);
     });
 
@@ -385,6 +386,8 @@ document.addEventListener("DOMContentLoaded", function() {
   (window.kindle || top.kindle).messaging.receiveMessage("deviceABI", function(eventType, ABI) {
     deviceABI = ABI;
     document.getElementById("abi-status").innerText = "ABI: " + ABI;
+
+    loadAllRegistries(registriesFileURL)
   });
 
   setTimeout(function() {
@@ -395,6 +398,5 @@ document.addEventListener("DOMContentLoaded", function() {
     );
   }, 10);
 
-  loadAllRegistries(registriesFileURL)
   document.getElementById("js-status").innerText = "JS Working!";
 });
