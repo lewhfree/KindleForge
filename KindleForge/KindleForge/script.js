@@ -56,18 +56,6 @@ window.kindle.appmgr.ongo = function() {
       lock = false;
 
       loadAllRegistries("file://mnt/us/.KFPM/registrylist.txt")
-      // _fetch(
-      //   "https://kf.penguins184.xyz/registry.json",
-      //   function() {
-      //     _file("file:///mnt/us/.KFPM/installed.txt").then(function(data) {
-      //       var joined = data.replace(/\d+\.\s*/g, "\n").trim();
-      //       var installed = joined.split(/\n+/).map(function(line) {
-      //         return line.replace(/^\d+\.\s*/, "").trim();
-      //       }).filter(Boolean);
-      //       render(installed);
-      //     });
-      //   }
-      // );
     } else if (id === "KFORGE_UPDATE") {
       window.kindle.messaging.sendStringMessage("com.kindlemodding.utild", "runCMD", "curl https://kf.penguins184.xyz/update.sh | sh");
     };
@@ -158,7 +146,6 @@ function _fetch(url, cb) {
           pkgs.push(pkg);
         }
         if (cb) cb();
-        else init();
       } catch (e) {
         console.log("JSON Parse Failed", e);
       }
@@ -186,15 +173,6 @@ function _file(url) {
   });
 }
 
-function init() {
-  _file("file:///mnt/us/.KFPM/installed.txt").then(function(data) {
-    var joined = data.replace(/\d+\.\s*/g, "\n").trim();
-    var installed = joined.split(/\n+/).map(function(line) {
-      return line.replace(/^\d+\.\s*/, "").trim();
-    }).filter(Boolean);
-    render(installed);
-  });
-}
 
 function render(installed) {
   var icons = {
@@ -420,8 +398,5 @@ document.addEventListener("DOMContentLoaded", function() {
   }, 10);
 
   loadAllRegistries("file://mnt/us/.KFPM/registrylist.txt")
-  // _fetch(
-  //   "https://kf.penguins184.xyz/registry.json"
-  // );
   document.getElementById("js-status").innerText = "JS Working!";
 });
