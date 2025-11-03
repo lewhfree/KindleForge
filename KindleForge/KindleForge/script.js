@@ -45,6 +45,9 @@ function update() {
   window.kindle.messaging.sendMessage("com.lab126.chromebar", "configureChrome", chromebar);
 }
 
+const installedFileURL = "file:///mnt/us/.KFPM/installed.txt";
+const registriesFileURL = "file:///mnt/us/.KFPM/registrylist.txt";
+
 window.kindle.appmgr.ongo = function() {
   update();
   window.kindle.messaging.receiveMessage("systemMenuItemSelected", function(eventType, id) {
@@ -55,7 +58,7 @@ window.kindle.appmgr.ongo = function() {
       pkgs = [];
       lock = false;
 
-      loadAllRegistries("file://mnt/us/.KFPM/registrylist.txt")
+      loadAllRegistries(registriesFileURL)
     } else if (id === "KFORGE_UPDATE") {
       window.kindle.messaging.sendStringMessage("com.kindlemodding.utild", "runCMD", "curl https://kf.penguins184.xyz/update.sh | sh");
     };
@@ -353,7 +356,7 @@ function loadAllRegistries(fileUrl) {
     var numberOfRepos = repos.length;
 
     if (numberOfRepos == 0) {
-      _file("file:///mnt/us/.KFPM/installed.txt").then(function(data) {
+      _file(installedFileURL).then(function(data) {
         installed = dataLinesToArray(data);
         render(installed);
       });
@@ -366,7 +369,7 @@ function loadAllRegistries(fileUrl) {
     function oneRepoLoaded() {
       reposToLoad--;
       if (reposToLoad == 0) {
-        _file("file:///mnt/us/.KFPM/installed.txt").then(function(data) {
+        _file(installedFileURL).then(function(data) {
           var joined = data.replace(/\d+\.\s*/g, "\n").trim();
           var installed = joined.split(/\n+/).map(function(line) {
             return line.replace(/^\d+\.\s*/, "").trim();
@@ -374,8 +377,7 @@ function loadAllRegistries(fileUrl) {
           render(installed);
         });
       };
-    }
-    repos.forEach(function(url) {
+    } repos.forEach(function(url) {
       _fetch(url, oneRepoLoaded);
     });
 
@@ -396,6 +398,6 @@ document.addEventListener("DOMContentLoaded", function() {
     );
   }, 10);
 
-  loadAllRegistries("file://mnt/us/.KFPM/registrylist.txt")
+  loadAllRegistries(registriesFileURL)
   document.getElementById("js-status").innerText = "JS Working!";
 });
