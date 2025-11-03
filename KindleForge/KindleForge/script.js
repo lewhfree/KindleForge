@@ -370,10 +370,7 @@ function loadAllRegistries(fileUrl) {
       reposToLoad--;
       if (reposToLoad == 0) {
         _file(installedFileURL).then(function(data) {
-          var joined = data.replace(/\d+\.\s*/g, "\n").trim();
-          var installed = joined.split(/\n+/).map(function(line) {
-            return line.replace(/^\d+\.\s*/, "").trim();
-          }).filter(Boolean);
+          var installed = dataLinesToArray(data);
           render(installed);
         });
       };
