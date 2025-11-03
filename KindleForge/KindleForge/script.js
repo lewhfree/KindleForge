@@ -46,7 +46,7 @@ function update() {
 }
 
 const installedFileURL = "file:///mnt/us/.KFPM/installed.txt";
-const registriesFileURL = "file:///mnt/us/.KFPM/registrylist.txt";
+const registriesFileURL = "file:///mnt/us/.KFPM/repositories.txt";
 
 window.kindle.appmgr.ongo = function() {
   update();
