@@ -338,31 +338,30 @@ function render(installed) {
   gCard(cIndex);
 }
 
-/* This function loads the lines from file://mnt/us/.KFPM/registrylist.txt and then loads each one as a registry.  */
-/* Then it combines them all together and renders based on that, not on each one individually*/
+function dataLinesToArray(data) {
+  var joined = data.replace(/\d+\.\s*/g, "\n").trim();
+  var list = joined.split(/\n+/).map(function(line) {
+    return line.replace(/^\d+\.\s*/, "").trim();
+  }).filter(Boolean);
+  return list;
+}
+
 function loadAllRegistries(fileUrl) {
-
   _file(fileUrl).then(function(data) {
-    var joined = data.replace(/\d+\.\s*/g, "\n").trim();
-    var repos = joined.split(/\n+/).map(function(line) {
-      return line.replace(/^\d+\.\s*/, "").trim();
-    }).filter(Boolean);
+    var repos = dataLinesToArray(data)
 
-    numberOfRepos = repos.length;
+    var numberOfRepos = repos.length;
 
     if (numberOfRepos == 0) {
       _file("file:///mnt/us/.KFPM/installed.txt").then(function(data) {
-        var joined = data.replace(/\d+\.\s*/g, "\n").trim();
-        var installed = joined.split(/\n+/).map(function(line) {
-          return line.replace(/^\d+\.\s*/, "").trim();
-        }).filter(Boolean);
+        installed = dataLinesToArray(data);
         render(installed);
       });
       console.error("0 repos!");
       return;
     }
 
-    reposToLoad = numberOfRepos;
+    var reposToLoad = numberOfRepos;
 
     function oneRepoLoaded() {
       reposToLoad--;
