@@ -26,10 +26,9 @@ const (
 )
 
 var (
-	registry     = fetchRegistry("https://kf.penguins184.xyz/")
-	installed    = getInstalled()
-	ABI          = fetchABI()
-	repositories []string
+	registry  = fetchAllRegistries()
+	installed = getInstalled()
+	ABI       = fetchABI()
 )
 
 type Package struct {
@@ -39,12 +38,12 @@ type Package struct {
 	Description  string   `json:"description"`
 	Author       string   `json:"author"`
 	ABI          []string `json:"ABI"`
-	Repo         string   `json:`
+	Repo         string   `json:"-"`
 }
 
 func main() {
 	ensureInstalledDir()
-	// checkRepositoryFile()
+	checkRepositoryFile()
 
 	args := os.Args[1:]
 
@@ -72,16 +71,21 @@ func main() {
 			fmt.Println("Error: -r/-u Requires A Package Name!")
 			return
 		}
-		pkg := args[1]
+		pkgId := args[1]
 
-		if !isInstalled(pkg) {
+		if !isInstalled(pkgId) {
 			fmt.Println("[KFPM] Package ID Not Installed.")
+			return
+		}
+		pkg, err := getPackage(pkgId)
+		if err != nil {
+			fmt.Println("package not found main case ru", err)
 			return
 		}
 
 		if runScript(pkg, "uninstall", verbose) {
 			fmt.Println("[KFPM] Removal Success!")
-			removeInstalled(pkg)
+			removeInstalled(pkgId)
 			setStatus("packageUninstallStatus", "success")
 		} else {
 			fmt.Println("[KFPM] Removal Failure!")
@@ -134,7 +138,7 @@ func checkRepositoryFile() {
 		_, err2 := f.WriteString(defaultRepoURL)
 
 		if err2 != nil {
-			fmt.Println("error writing default repo file", err)
+			fmt.Println("error writing default repo file", err2)
 			return
 		}
 	}
@@ -146,6 +150,23 @@ func fetchAllRegistries() []Package {
 		fmt.Println("Couldn't open registry list, fetchallregistires", err)
 		return nil
 	}
+
+	urls := strings.Split(strings.TrimSpace(string(data)), "\n")
+	var allPackageList []Package
+
+	for _, url := range urls {
+		baseURL := strings.TrimSpace(url)
+		//blank line
+		if baseURL == "" {
+			continue
+		}
+
+		pkgs := fetchRegistry(baseURL)
+		if pkgs != nil {
+			allPackageList = append(allPackageList, pkgs...)
+		}
+	}
+	return allPackageList
 }
 
 func install(pkgId string, verbose bool, loopedDeps []string) error {
@@ -181,7 +202,7 @@ func install(pkgId string, verbose bool, loopedDeps []string) error {
 		}
 	}
 
-	if runScript(pkgId, "install", verbose) {
+	if runScript(pkg, "install", verbose) {
 		fmt.Printf("[KFPM] Successfully Installed '%s'!\n", pkgId)
 		appendInstalled(pkgId)
 		setStatus("packageInstallStatus", "success")
@@ -193,8 +214,8 @@ func install(pkgId string, verbose bool, loopedDeps []string) error {
 }
 
 // Install/Uninstall Runners
-func runScript(pkg string, action string, verbose bool) bool {
-	url := fmt.Sprintf("%s%s/%s.sh", registryBase, pkg, action)
+func runScript(pkg Package, action string, verbose bool) bool {
+	url := fmt.Sprintf("%s%s/%s.sh", pkg.Repo, pkg.Uri, action)
 	cmd := exec.Command("/bin/sh", "-c", "curl -fSL --progress-bar "+url+" | sh")
 
 	if verbose {
@@ -290,7 +311,7 @@ func listAvailable() {
 
 // Helpers
 func fetchRegistry(baseURL string) []Package {
-	resp, err := http.Get(baseURL + "/registry.txt")
+	resp, err := http.Get(baseURL + "/registry.json")
 	if err != nil {
 		fmt.Println("[KFPM] Failed To Fetch Registry:", err)
 		return nil
